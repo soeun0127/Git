@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Git Notes — 개발 기록</title>
+  <style>
+    :root {
+      --ink: #20243a;
+      --muted: #747b91;
+      --paper: #f7f8fc;
+      --line: #e8eaf2;
+      --purple: #7566e8;
+      --purple-dark: #5949c8;
+      --mint: #dff6ee;
+      --white: #fff;
+      --shadow: 0 18px 55px rgba(43, 46, 83, .09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% 5%, rgba(117,102,232,.12), transparent 24rem),
+        radial-gradient(circle at 5% 35%, rgba(76,196,158,.10), transparent 22rem),
+        var(--paper);
+      font-family: Inter, Pretendard, "Noto Sans KR", system-ui, sans-serif;
+      line-height: 1.6;
+    }
+    .wrap { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
+    header { padding: 26px 0; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: -.04em; }
+    .brand-mark {
+      width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center;
+      color: white; background: linear-gradient(135deg, #8d80f5, #5b4bd0);
+      box-shadow: 0 7px 18px rgba(117,102,232,.3); font-size: 18px;
+    }
+    nav { display: flex; gap: 25px; color: var(--muted); font-size: 13px; font-weight: 600; }
+    nav a { color: inherit; text-decoration: none; }
+    nav a:hover { color: var(--purple); }
+    .hero { padding: 72px 0 58px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 55px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--purple-dark); background: #eeecff; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 800; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #7566e8; }
+    h1 { font-size: clamp(42px, 6vw, 66px); line-height: 1.12; letter-spacing: -.065em; margin: 22px 0 18px; }
+    h1 span { color: var(--purple); }
+    .intro { max-width: 510px; color: var(--muted); font-size: 16px; margin: 0 0 28px; }
+    .button {
+      display: inline-flex; align-items: center; gap: 9px; padding: 13px 19px; border-radius: 13px;
+      color: white; text-decoration: none; font-size: 13px; font-weight: 750;
+      background: var(--ink); box-shadow: 0 9px 20px rgba(32,36,58,.16); transition: .2s;
+    }
+    .button:hover { transform: translateY(-2px); background: var(--purple-dark); }
+    .visual {
+      min-height: 300px; border: 1px solid rgba(255,255,255,.9); border-radius: 28px;
+      padding: 24px; background: rgba(255,255,255,.72); box-shadow: var(--shadow);
+      transform: rotate(2deg); position: relative;
+    }
+    .window { border-radius: 17px; background: #20243a; color: #e8eaff; padding: 18px; box-shadow: 0 14px 30px rgba(32,36,58,.18); transform: rotate(-2deg); }
+    .window-top { display: flex; gap: 6px; padding-bottom: 17px; border-bottom: 1px solid #383d56; }
+    .window-top i { width: 8px; height: 8px; border-radius: 50%; background: #ff8f9a; }
+    .window-top i:nth-child(2) { background: #ffd27a; }
+    .window-top i:nth-child(3) { background: #79d9b5; }
+    pre { margin: 18px 0 4px; white-space: pre-wrap; font: 12px/2 "SFMono-Regular", Consolas, monospace; }
+    .cmd { color: #9de2c8; } .comment { color: #9299b4; }
+    .float-tag { position: absolute; right: -17px; bottom: 25px; background: var(--mint); color: #28765c; border-radius: 13px; padding: 11px 15px; font-size: 12px; font-weight: 800; box-shadow: 0 8px 20px rgba(40,118,92,.1); }
+    .section-head { display: flex; align-items: end; justify-content: space-between; margin: 12px 0 20px; }
+    .section-head h2 { margin: 0; font-size: 22px; letter-spacing: -.04em; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 12px; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding-bottom: 75px; }
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: 19px; padding: 22px; box-shadow: 0 8px 25px rgba(43,46,83,.035); transition: .2s; }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .icon { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: #f0efff; color: var(--purple); font-size: 17px; }
+    .card:nth-child(2) .icon { background: #e5f7f0; color: #329879; }
+    .card:nth-child(3) .icon { background: #fff2e5; color: #d88b3d; }
+    .card h3 { margin: 17px 0 6px; font-size: 16px; }
+    .card p { color: var(--muted); font-size: 13px; margin: 0; }
+    .card code { display: inline-block; margin-top: 16px; color: #5d50c5; background: #f3f1ff; padding: 6px 9px; border-radius: 8px; font-size: 11px; }
+    footer { border-top: 1px solid var(--line); padding: 22px 0 30px; color: #9298aa; font-size: 11px; display: flex; justify-content: space-between; }
+    @media (max-width: 720px) {
+      nav { gap: 13px; font-size: 11px; }
+      .hero { grid-template-columns: 1fr; padding: 48px 0; gap: 35px; }
+      .visual { max-width: 500px; width: 92%; margin: 0 auto; }
+      .cards { grid-template-columns: 1fr; }
+      .section-head { align-items: start; flex-direction: column; gap: 5px; }
+      footer { gap: 10px; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand"><div class="brand-mark">✦</div> git notes</div>
+      <nav>
+        <a href="#workflow">Workflow</a>
+        <a href="#commands">Commands</a>
+        <a href="#about">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="about">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> SMALL STEPS, BIG PROGRESS</div>
+          <h1>코드를 기록하고,<br /><span>함께 성장하기.</span></h1>
+          <p class="intro">
+            좋은 개발 습관은 작은 기록에서 시작됩니다.
+            오늘의 변경 사항을 정리하고, Git으로 작업의 흐름을 관리해 보세요.
+          </p>
+          <a class="button" href="#commands">명령어 살펴보기 <span>↗</span></a>
+        </div>
+
+        <div class="visual" aria-label="Git 명령어 예시 카드">
+          <div class="window">
+            <div class="window-top"><i></i><i></i><i></i></div>
+            <pre><span class="comment"># 변경 사항 확인</span>
+<span class="cmd">$ git status</span>
+
+<span class="comment"># 커밋할 파일 선택</span>
+<span class="cmd">$ git add index.html</span>
+
+<span class="comment"># 작업 기록 남기기</span>
+<span class="cmd">$ git commit -m "Add page"</span>
+
+<span class="comment"># 원격 저장소에 업로드</span>
+<span class="cmd">$ git push origin main</span></pre>
+          </div>
+          <div class="float-tag">✓ progress saved</div>
+        </div>
+      </section>
+
+      <section id="workflow">
+        <div class="section-head">
+          <h2>Git workflow</h2>
+          <p>변경 사항이 기록되는 기본 흐름</p>
+        </div>
+        <div class="cards" id="commands">
+          <article class="card">
+            <div class="icon">⌘</div>
+            <h3>01. Working Directory</h3>
+            <p>프로젝트 파일을 직접 만들고 수정하는 공간입니다. 변경 사항은 아직 커밋되지 않았습니다.</p>
+            <code>git diff</code>
+          </article>
+          <article class="card">
+            <div class="icon">＋</div>
+            <h3>02. Staging Area</h3>
+            <p>다음 커밋에 포함할 변경 사항을 골라 임시로 올려두는 공간입니다.</p>
+            <code>git add .</code>
+          </article>
+          <article class="card">
+            <div class="icon">↗</div>
+            <h3>03. Repository</h3>
+            <p>스테이징한 변경 사항을 커밋으로 기록하고, 필요하면 원격 저장소에 공유합니다.</p>
+            <code>git commit · git push</code>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 git notes</span>
+      <span>Made for learning, built with curiosity.</span>
+    </footer>
+  </div>
+</body>
+</html>
